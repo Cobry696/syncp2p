@@ -22,8 +22,6 @@ class Client:
         """
 
         self.seekNodes()
-        while True:
-            pass
 
     def seekNodes(self):
         # iterate through nodes and connect to each one
@@ -32,6 +30,10 @@ class Client:
 
         self.comm.sendall(self.nodeID[0].encode("UTF-8")) # send every node your publicID to validate connection
         print("Connected to all nodes")
+
+    # broadcasts its data to every server it has a connection with
+    def sync(self):
+        pass
 
 client = Client(("6", "12"), ("",), {5 : "127.0.0.1"})
 client.connect()

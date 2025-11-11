@@ -17,29 +17,39 @@ class Server:
         self.comm = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # comm as in communication which is the attribute that stores the socket itself
 
     # Method that connects this node as a server to the network
-    def connect(self):
+    def connect(self, allowedConnections=2):
 
         """
         Method that connects this node as a server to the network
         """
         self.comm.bind(("0.0.0.0", self.port)) # binds the server to listen for incoming connections in the next line
         self.comm.listen() # starts the server listening for incoming connections
-        acceptingThread = threading.Thread(target=self.acceptIncoming, daemon=True) # defines a thread for accepting incoming connections
-        acceptingThread.start() # starts the accepting thread
-        while True:
-            input("Hit Enter to end")
-            break
+        self.acceptIncoming(allowedConnections)
 
+    # Method that closes all client sockets
+    def disconnect(self):
+        for client in self.clients:
+            client.close()
 
-    def acceptIncoming(self):
+    # method that listens and connects to every incoming request
+    def acceptIncoming(self, allowedConnections):
+        connections = 0
         addrs = [] # stores all connected addresses to add to address list
         sockets = [] # stores all sockets for communication
-        while True:
+        while connections < allowedConnections:
             clientSocket, addr = self.comm.accept()
             print(f"Connection from: {addr}")
             print(clientSocket.recv(1024).decode("UTF-8"))
             addrs.append(addr[0])
-            clientSocket.close()
+            sockets.append(socket)
+            connections += 1
+            #clientSocket.close()
+        self.clients = sockets
+        self.addrs = addrs
+
+    # Method that receives data from each client and merges it into one variable
+    def sync(self):
+        pass
 
 server = Server(("5", "10"), ("",), {6 : "127.0.0.1"})
 server.connect()

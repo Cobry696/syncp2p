@@ -21,4 +21,5 @@ class Node:
         Method that connects Node to the network
         
         """
+        nodesPer = nodes**(1/2)
         pass                                                                       
